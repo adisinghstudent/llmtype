@@ -103,7 +103,8 @@ async function judgeWithOpenAI(intended, typed, model) {
     },
     body: JSON.stringify({
       model,
-      temperature: 0,
+      max_completion_tokens: 400,
+      reasoning_effort: "low",
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: JUDGE_SYSTEM },
@@ -222,12 +223,14 @@ async function runJudge(intended, typed, modelId) {
       );
     }
     return localJudge(intended, typed);
-  } catch {
+  } catch (e) {
     const local = localJudge(intended, typed);
+    const why = e instanceof Error ? e.message.slice(0, 160) : "unknown";
+    console.error("judge api failed", why);
     return {
       ...local,
       source: "local-fallback",
-      gloss: `${local.gloss} (API failed \u2014 local fallback.)`
+      gloss: `${local.gloss} (API failed \u2014 local fallback. ${why})`
     };
   }
 }
