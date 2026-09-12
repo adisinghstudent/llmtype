@@ -149,7 +149,7 @@ export function pairMistakes(
 }
 
 export function withReadout(
-  result: Omit<JudgeResult, "inferred" | "intended" | "typed" | "matched" | "missing" | "extra" | "overlap"> &
+  result: Omit<JudgeResult, "inferred" | "intended" | "typed" | "matched" | "missing" | "extra" | "overlap" | "mistakes"> &
     Partial<Pick<JudgeResult, "inferred" | "matched" | "missing" | "extra" | "overlap" | "mistakes">>,
   intended: string,
   typed: string

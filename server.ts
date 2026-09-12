@@ -30,6 +30,24 @@ function loadEnvFile(path: string) {
 
 loadEnvFile(resolve(__dirname, ".env"));
 
+function readBody(req: IncomingMessage): Promise<string> {
+  return new Promise((resolveBody, reject) => {
+    const chunks: Buffer[] = [];
+    req.on("data", (c) => chunks.push(c));
+    req.on("end", () => resolveBody(Buffer.concat(chunks).toString("utf8")));
+    req.on("error", reject);
+  });
+}
+
+function json(res: ServerResponse, status: number, body: unknown) {
+  res.writeHead(status, {
+    "Content-Type": "application/json",
+    "Cache-Control": "no-store",
+  });
+  res.end(JSON.stringify(body));
+}
+
+
 async function main() {
   const models = await availableModels();
   const def = defaultModelId(models);

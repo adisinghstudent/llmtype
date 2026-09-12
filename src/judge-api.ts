@@ -1,4 +1,4 @@
-import { localJudge, withReadout, type JudgeResult } from "./judge.ts";
+import { localJudge, withReadout, type JudgeResult } from "./judge";
 
 export type ModelInfo = {
   id: string;
@@ -91,23 +91,6 @@ export function defaultModelId(models: ModelInfo[]): string {
   if (luna) return luna.id;
   const firstOpen = models.find((m) => m.provider === "openai");
   return firstOpen ? firstOpen.id : "local";
-}
-
-function readBody(req: IncomingMessage): Promise<string> {
-  return new Promise((resolveBody, reject) => {
-    const chunks: Buffer[] = [];
-    req.on("data", (c) => chunks.push(c));
-    req.on("end", () => resolveBody(Buffer.concat(chunks).toString("utf8")));
-    req.on("error", reject);
-  });
-}
-
-function json(res: ServerResponse, status: number, body: unknown) {
-  res.writeHead(status, {
-    "Content-Type": "application/json",
-    "Cache-Control": "no-store",
-  });
-  res.end(JSON.stringify(body));
 }
 
 const JUDGE_SYSTEM = `You are an LLM reading a messy typed message.
