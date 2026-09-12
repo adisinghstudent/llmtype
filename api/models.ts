@@ -1,4 +1,4 @@
-import { availableModels, defaultModelId } from "../src/judge-api";
+import { availableModels, defaultModelId } from "./_lib/judge-api";
 
 export async function GET() {
   const models = await availableModels();

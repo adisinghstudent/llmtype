@@ -1,5 +1,5 @@
-import { availableModels, defaultModelId, runJudge } from "../src/judge-api";
-import { withReadout } from "../src/judge";
+import { availableModels, defaultModelId, runJudge } from "./_lib/judge-api";
+import { withReadout } from "./_lib/judge";
 
 export async function POST(req: Request) {
   try {
