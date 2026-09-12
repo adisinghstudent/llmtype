@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LLMType — Type messy. Be understood.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <div class="brand">
+          <span class="logo">LLMType</span>
+          <span class="tagline">Type messy. Be understood.</span>
+        </div>
+        <nav class="controls" aria-label="Test controls">
+          <div class="seg" id="modeSeg" role="group" aria-label="Mode">
+            <button type="button" data-mode="words">words</button>
+            <button type="button" data-mode="intent" class="active">intent</button>
+          </div>
+          <div class="seg" id="durSeg" role="group" aria-label="Duration">
+            <button type="button" data-dur="15">15</button>
+            <button type="button" data-dur="30">30</button>
+            <button type="button" data-dur="60">60</button>
+            <button type="button" data-dur="enter" id="enterDur" class="active">↵</button>
+          </div>
+          <div class="model-picker" id="modelPicker">
+            <input
+              id="modelSearch"
+              class="model-search"
+              type="text"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Search models"
+              aria-label="Judge model"
+            />
+            <ul id="modelList" class="model-list" hidden></ul>
+            <div id="modelSeg" hidden></div>
+          </div>
+        </nav>
+      </header>
+
+      <main>
+        <div id="hud" class="hud" hidden>
+          <div class="hud-item hud-live-hidden"><span class="hud-label">wpm</span><span id="hudWpm">0</span></div>
+          <div class="hud-item hud-live-hidden"><span class="hud-label">llm%</span><span id="hudLlm">—</span></div>
+          <div class="hud-item hud-live-hidden"><span class="hud-label">classic%</span><span id="hudClassic">—</span></div>
+          <div class="hud-item"><span class="hud-label">time</span><span id="hudTime">↵</span></div>
+        </div>
+
+        <div id="intentBanner" class="intent-banner" hidden>
+          <span class="intent-label">type this</span>
+          <p id="intentText"></p>
+          <span class="intent-hint">Type it in your own words. Messy is fine. Enter to submit.</span>
+        </div>
+
+        <div id="wordsWrap" class="words-wrap">
+          <div id="words" class="words" aria-live="polite"></div>
+        </div>
+
+        <input
+          id="hiddenInput"
+          class="hidden-input"
+          autocomplete="off"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+          aria-label="Type here"
+        />
+
+        <p id="hint" class="hint">type below · enter to score · no mistakes until then</p>
+      </main>
+
+      <div id="results" class="results" hidden>
+        <div class="results-card">
+          <div id="badge" class="badge" hidden></div>
+          <div class="results-grid one">
+            <div class="stat primary" id="effStat" title="wpm until you send × llm accuracy">
+              <span class="stat-label">effective wpm</span>
+              <span id="resEffective" class="stat-value">0</span>
+            </div>
+          </div>
+          <span id="resQualified" hidden></span>
+          <span id="resRaw" hidden></span>
+          <span id="resLlm" hidden></span>
+          <span id="resClassic" hidden></span>
+          <span id="llmStat" hidden></span>
+          <p id="effExplain" class="eff-explain" hidden></p>
+          <div id="readout" class="readout">
+            <div class="readout-block">
+              <span class="readout-label">you typed</span>
+              <p id="roTyped"></p>
+            </div>
+            <div class="readout-pair">
+              <div class="readout-block">
+                <span class="readout-label">supposed to say</span>
+                <p id="roIntended"></p>
+              </div>
+              <div class="readout-block">
+                <span class="readout-label">llm heard</span>
+                <p id="roInferred"></p>
+              </div>
+            </div>
+            <div class="readout-block match">
+              <span class="readout-label">mistakes</span>
+              <p id="roMistakes" class="mistakes"></p>
+              <span id="roOverlap" hidden></span>
+              <span id="roMatched" hidden></span>
+              <span id="roMissing" hidden></span>
+              <span id="roExtra" hidden></span>
+            </div>
+          </div>
+          <div class="meta" id="resMeta"></div>
+          <button type="button" id="newTest" class="new-test" onclick="window.__llmtypeReset && window.__llmtypeReset()">New test</button>
+          <p class="restart-hint">or click outside · space · esc</p>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
