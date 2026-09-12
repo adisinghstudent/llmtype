@@ -1,9 +1,17 @@
-import { availableModels, defaultModelId, runJudge } from "./_lib/judge-api";
-import { withReadout } from "./_lib/judge";
+import { availableModels, defaultModelId, runJudge } from "./_lib/judge-api.js";
+import { withReadout } from "./_lib/judge.js";
 
-export async function POST(req: Request) {
+export default async function handler(
+  req: { method?: string; body?: unknown },
+  res: {
+    setHeader: (k: string, v: string) => void;
+    status: (n: number) => { json: (b: unknown) => void; end: () => void };
+    json: (b: unknown) => void;
+  }
+) {
+  res.setHeader("Cache-Control", "no-store");
   try {
-    const body = (await req.json()) as {
+    const body = (req.body ?? {}) as {
       intended?: string;
       typed?: string;
       model?: string;
@@ -15,9 +23,9 @@ export async function POST(req: Request) {
       String(body.typed ?? ""),
       String(body.model ?? def)
     );
-    return Response.json(result, { headers: { "Cache-Control": "no-store" } });
+    return res.status(200).json(result);
   } catch {
-    return Response.json(
+    return res.status(200).json(
       withReadout(
         {
           score: 0,
@@ -27,8 +35,7 @@ export async function POST(req: Request) {
         },
         "",
         ""
-      ),
-      { headers: { "Cache-Control": "no-store" } }
+      )
     );
   }
 }
