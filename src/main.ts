@@ -686,7 +686,9 @@ document.body.addEventListener("click", (e) => {
   if (!state.finished) focusInput();
 });
 
-await loadModels();
-bindModelPicker();
-(window as unknown as { __llmtypeReset: () => void }).__llmtypeReset = resetTest;
-resetTest();
+void (async () => {
+  await loadModels();
+  bindModelPicker();
+  (window as unknown as { __llmtypeReset: () => void }).__llmtypeReset = resetTest;
+  resetTest();
+})();
